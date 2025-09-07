@@ -1,0 +1,1 @@
+In this repository I'm working on the Python code of the book Quantitative Economics with Python by Thomas J. Sargent and John Stachurski. I'll replicating the code from different chapters that interest me but won't likely cover the whole book. I've already found a couple of lines of code that don't work anymore with the 2021 edition (the one I have) and will update those.
