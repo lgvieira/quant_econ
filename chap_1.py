@@ -122,3 +122,68 @@ dp_dg
 print('dp0 / dr is:')
 dp_dr = sym.diff(p0, r)
 dp_dr
+
+# Back to the Keynesian Multiplier
+
+# Function that calculates a path of y
+def calculate_y(i, b, g, T, y_init):
+    y = np.zeros(T+1)
+    y[0] = i + b * y_init + g
+    for t in range(1, T+1):
+        y[t] = b * y[t-1] + i + g
+    return y
+
+# Initial values
+i_0 = 0.3
+g_0 = 0.3
+# 2/3 of income goes towards consumption
+b = 2/3
+y_init = 0
+T = 100
+
+fig, ax = plt.subplots()
+ax.set_title('Path of Aggregate Output Over Time')
+ax.set_xlabel('$t$')
+ax.set_ylabel('$y_t$')
+ax.plot(np.arange(0, T+1), calculate_y(i_0, b, g_0, T, y_init))
+
+# Output predicted by geometric series
+ax.hlines(i_0 / (1 - b) + g_0 / (1 - b), xmin=-1, xmax=101, linestyles='--')
+plt.show()
+
+bs = (1/3, 2/3, 5/6, 0.9)
+
+fig,ax = plt.subplots()
+ax.set_title('Changing Consumption as a Fraction of Income')
+ax.set_ylabel('$y_t$')
+ax.set_xlabel('$t$')
+x = np.arange(0, T+1)
+for b in bs:
+    y = calculate_y(i_0, b, g_0, T, y_init)
+    ax.plot(x, y, label=r'$b=$'+f"{b:.2f}")
+ax.legend()
+plt.show()
+
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6, 10))
+fig.subplots_adjust(hspace=0.3)
+
+x = np.arange(0, T+1)
+values = [0.3, 0.4]
+
+for i in values:
+    y = calculate_y(i, b, g_0, T, y_init)
+    ax1.plot(x, y, label=f"i={i}")
+for g in values:
+    y = calculate_y(i_0, b, g, T, y_init)
+    ax2.plot(x, y, label=f"g={g}")
+
+axes = ax1, ax2
+param_labels = "Investment", "Government Spending"
+for ax, param in zip(axes, param_labels):
+    ax.set_title(f'An Increase in {param} on Output')
+    ax.legend(loc ="lower right")
+    ax.set_ylabel('$y_t$')
+    ax.set_xlabel('$t$')
+plt.show()
+
+######
